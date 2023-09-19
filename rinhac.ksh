@@ -84,19 +84,21 @@ function evaluate {
 				"Or") r=$(( a || b )) ;;
 	            	esac
 			unset a b ;;
-#		"Bool") ;;
-
+		"Bool") printlog ERRORF "$kind not implemented yet, soon I will get it done." ;;
 		"Call") # Para quem estamos ligando?
 		       	identifier=$(eval_per_token $node callee.text)
 			function_node=${records[$identifier]}
 			
-
 			# Essa parte é para que os parâmetros da função sejam
 			# declarados em forma de variável e tenham seus valores
-			# devidamente associados aos seus identificadores
+			# devidamente associados aos seus identificadores.
 			parametersn=$(n_per_token $function_node parameters)
 			argsn=$(n_per_token $node arguments)
 
+			# Por mais que possivelmente o analisador léxico do
+			# desafio já faça isso, nós talvez precisemos verificar
+			# se a quantidade de argumentos passados para a função é
+			# o mesmo de parâmetros aceitos por ela.
 			args_param_difference=$((argsn - parametersn))
 
 			if (( args_param_difference != 0 )); then
@@ -151,8 +153,8 @@ function evaluate {
 		"Int") value="$(eval_per_token $node value)"
 		       isdigit $value "$0: Expected 'Int', apparently got an string." \
 			       && r=$(printf '%d' $value);;
-	        "Str") r=$(eval_per_token $node value);;
-		"Var") r=$(eval_per_identifier $(eval_per_token $node text)) ;;
+	        "Str") r="$(eval_per_token $node value)";;
+		"Var") r="$(eval_per_identifier $(eval_per_token $node text))" ;;
 		"Tuple"| "First" | "Second") printlog ERRORF \
 			"$progname: Tuples and functions related are not implemented for now." ;;
 		"Print") r="$(evaluate "$node.value")" ;;
@@ -160,9 +162,8 @@ function evaluate {
 
 	# Como em shell a saída de uma função normalmente é
 	# imprimindo algo na tela, iremos retornar r
-	# imprimindo-o. Usando echo ao invés do print específico de Korn Shell
-	# por uma questão de simplicidade.
-	echo "$r"
+	# imprimindo-o. 
+	printf '%s\n' "$r"
 	
 	unset node kind r
 	return 0
@@ -181,10 +182,13 @@ function eval_per_token {
 
 # Essa função vai retornar o conteúdo de uma variável pelo seu identificador,
 # evitando marabalismos com caracteres de escape.
+# Usando o 'echo -n' ao invés do 'printf' pois o último se mostrou problemático
+# com variáveis que contém strings com espaços, como o exemplo em "print.json".
 function eval_per_identifier {
+	[[ $verbose ]] && set -x
 	identifier=$1
 
-	eval echo \$\{$identifier\}
+	eval echo -n \$\{"$identifier"\}
 }
 
 # Essa função retorna o número de elementos em um array dentro de uma variável
@@ -194,7 +198,7 @@ function n_per_token {
 	token=$2
 	index=$3
 
-	eval echo \$\{\#$node.$token\[${index:-@}\]\}
+	eval printf '%d' \$\{\#$node.$token\[${index:-@}\]\}
 }
 
 # Essa função basicamente vai criar um array associativo onde o identificador de
