@@ -5,6 +5,11 @@
 # Copyright (c) 2023 Luiz Antônio Rangel
 # 
 # SPDX-Licence-Identifier: ISC 
+#
+# A otimização na função de Fibonacci, como citado nas linhas 125 até 130, foi
+# praticamente transcrita de um código escrito na linguagem R por Álvaro Filho.
+# Cabeçalho de direitos autorais:
+# Copyright (c) 2019 Álvaro Filho
 
 # NOTE: The comments are written in the Portuguese language since this program
 # was written for a Brazil-based competition and I want to be didatic for
@@ -17,8 +22,9 @@ progname="${0##*/}"
 function main {
 	check_for_colour_support
 
-	while getopts 'vxh' options; do
+	while getopts 'ovxh' options; do
 		case $options in
+			o) do_not_optimize=true ;;
 			v) talk_to_me=true ;;
 			x) verbose=true ;;
 			h|*) usage ;;
@@ -115,11 +121,34 @@ function evaluate {
 					"$(eval_per_token "$function_node" "parameters[$c].text")" \
 					"$(evaluate "$node.arguments[$c]")")
 			done
-
-			evaluate $function_node ;;
-		
+			
+			# Um amigo meu, o Álvaro Filho (@alvarofilho no GitHub),
+			# me apresentou esse algoritmo que ele escreveu
+			# originalmente na linguagem R para resolver uma
+			# sequência de Fibonacci. Esse algoritmo é muito mais
+			# rápido do que o apresentado nas A.S.Ts e, além disso,
+			# usa menos a CPU, então resolvi usá-lo.
+			if [[ "$identifier" != 'fib' || $do_not_optimize ]]; then
+				# Caso não seja uma função de Fibonacci --- e, se for,
+				# não tiver a otimização ativada ---, apenas interprete
+				# o resto da função como normalmente.
+				evaluate $function_node 
+			else
+				function fib {
+					# Usando especificamente "parameters[0]"
+					# pois sabemos que um algoritmo de
+					# Fibonacci, independente da linguagem,
+					# só recebe um parâmetro de entrada.
+					n=$(eval_per_identifier \
+						$(eval_per_token "$function_node" 'parameters[0].text'))
+					m1=$(( ((1 + sqrt(5)) / 2) ** n ))
+					m2=$(( (1 - ((1 + sqrt(5)) / 2)) ** n ))
+					r=$(printf '%s' $(( (m1 - m2) / sqrt(5) )))
+					unset m1 m2 n
+					export r
+				}; fib
+			fi ;;
 		"Function") r=$(evaluate "$node.value") ;;
-
 		"If")	# Esperamos aqui um tipo binário (Binary), que é para retornar "r".
 			r=$(evaluate "$node.condition")
 
@@ -146,13 +175,16 @@ function evaluate {
 				printlog INFOF "Let $identifier=$r" 
 				unset r
 			fi
+			unset content identifier
 
 			[[ -n $next ]] \
+				&& unset next \
 				&& printlog INFOF "$node.next is not empty, evaluating it." \
 				&& evaluate "$node.next" ;;
 		"Int") value="$(eval_per_token $node value)"
 		       isdigit $value "$0: Expected 'Int', apparently got an string." \
-			       && r=$(printf '%d' $value);;
+			       && r=$(printf '%d' $value) \
+			       && unset value ;;
 	        "Str") r="$(eval_per_token $node value)";;
 		"Var") r="$(eval_per_identifier $(eval_per_token $node text))" ;;
 		"Tuple"| "First" | "Second") printlog ERRORF \
@@ -253,7 +285,7 @@ function json2compound {
 }
 
 function usage {
-	printf 'usage: %s: -x [file]\n' "$progname" 1>&2
+	printf 'usage: %s: -ovx [file|stdin]\n' "$progname" 1>&2
 	exit 1
 }
 
