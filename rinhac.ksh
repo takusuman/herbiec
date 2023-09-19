@@ -152,8 +152,7 @@ function evaluate {
 		       isdigit $value "$0: Expected 'Int', apparently got an string." \
 			       && r=$(printf '%d' $value);;
 	        "Str") r=$(eval_per_token $node value);;
-#		"Var") r=$(eval_per_token $node text) ;;
-		"Var") r=$(eval echo \$$(eval_per_token $node text)) ;;
+		"Var") r=$(eval_per_identifier $(eval_per_token $node text)) ;;
 		"Tuple"| "First" | "Second") printlog ERRORF \
 			"$progname: Tuples and functions related are not implemented for now." ;;
 		"Print") r="$(evaluate "$node.value")" ;;
@@ -169,14 +168,23 @@ function evaluate {
 	return 0
 }
 
-# Essa função vai retorar apenas o conteúdo da nossa A.S.T. sem termos de fazer
-# grandes marabalismos com caracteres de escape, facilitando bastante que a
-# gente consiga caminhar pela A.S.T. na função que a "avalia".
+# Essa função vai retornar apenas o conteúdo da nossa A.S.T., facilitando
+# bastante que a gente consiga caminhar pela A.S.T. na função que a "avalia".
+# Analisando de forma estritamente técnica, é uma "função-porcelana" para a
+# "eval_per_identifier".
 function eval_per_token {
 	node=$1
 	token=$2
 
-	eval echo \$\{$node.$token\}
+	eval_per_identifier "$node.$token"
+}
+
+# Essa função vai retornar o conteúdo de uma variável pelo seu identificador,
+# evitando marabalismos com caracteres de escape.
+function eval_per_identifier {
+	identifier=$1
+
+	eval echo \$\{$identifier\}
 }
 
 # Essa função retorna o número de elementos em um array dentro de uma variável
