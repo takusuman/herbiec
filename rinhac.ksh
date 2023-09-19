@@ -134,6 +134,8 @@ function evaluate {
 				# o resto da função como normalmente.
 				evaluate $function_node 
 			else
+				printlog WARNF "Using internal and optimized $identifier() implementation."
+				printlog WARNF "To disable it, re-run the program passing the -o option."
 				function fib {
 					# Usando especificamente "parameters[0]"
 					# pois sabemos que um algoritmo de
@@ -152,7 +154,6 @@ function evaluate {
 		"If")	# Esperamos aqui um tipo binário (Binary), que é para retornar "r".
 			r=$(evaluate "$node.condition")
 
-			printlog INFOF "If: return was $r (binary value)."
 			if (( r )); then
 				evaluate "$node.then"
 			else
