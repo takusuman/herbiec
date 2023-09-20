@@ -142,7 +142,7 @@ function evaluate {
 					# pois sabemos que um algoritmo de
 					# Fibonacci, independente da linguagem,
 					# só recebe um parâmetro de entrada.
-					n=$(eval_per_identifier \
+					integer n=$(eval_per_identifier \
 						$(eval_per_token "$function_node" 'parameters[0].text'))
 					m1=$(( ((1 + sqrt(5)) / 2) ** n ))
 					m2=$(( (1 - ((1 + sqrt(5)) / 2)) ** n ))
@@ -212,6 +212,7 @@ function eval_per_token {
 	token=$2
 
 	eval_per_identifier "$node.$token"
+	unset node token
 }
 
 # Essa função vai retornar o conteúdo de uma variável pelo seu identificador,
@@ -223,6 +224,7 @@ function eval_per_identifier {
 	identifier=$1
 
 	eval echo -n \$\{"$identifier"\}
+	unset identifier
 }
 
 # Essa função retorna o número de elementos em um array dentro de uma variável
@@ -233,6 +235,7 @@ function n_per_token {
 	index=$3
 
 	eval printf '%d' \$\{\#$node.$token\[${index:-@}\]\}
+	unset node token index
 }
 
 # Essa função basicamente vai criar um array associativo onde o identificador de
@@ -247,6 +250,7 @@ function record_function {
 	address="$2"
 
 	records+=([$identifier]="$address")
+	unset identifier address
 }
 
 # Essa função deve passar todo o JSON para uma variável composta --- essas
@@ -307,7 +311,7 @@ function printlog {
 		return 0
 	fi
 
-	unset msg colour severity
+	unset msg flag colour severity
 }
 
 function check_for_colour_support {
