@@ -135,8 +135,9 @@ function evaluate {
 				evaluate $function_node 
 			else
 				printlog WARNF "Using internal and optimized $identifier() implementation."
-				printlog WARNF "To disable it, re-run the program passing the -o option."
+				printlog WARNF "To disable it, re-run the program passing the '-o' option."
 				function fib {
+					[[ $verbose ]] && set -x
 					# Usando especificamente "parameters[0]"
 					# pois sabemos que um algoritmo de
 					# Fibonacci, independente da linguagem,
