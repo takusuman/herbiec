@@ -128,7 +128,7 @@ function evaluate {
 			# sequência de Fibonacci. Esse algoritmo é muito mais
 			# rápido do que o apresentado nas A.S.Ts e, além disso,
 			# usa menos a CPU, então resolvi usá-lo.
-			if [[ "$identifier" != 'fib' || $do_not_optimize ]]; then
+			if [[ ! "$identifier" =~ (fib|fibonacci) || $do_not_optimize ]]; then
 				# Caso não seja uma função de Fibonacci --- e, se for,
 				# não tiver a otimização ativada ---, apenas interprete
 				# o resto da função como normalmente.
