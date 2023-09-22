@@ -122,6 +122,8 @@ function evaluate {
 					"$(evaluate "$node.arguments[$c]")")
 			done
 			
+			unset args_param_difference argsn parametersn
+
 			# Um amigo meu, o Álvaro Filho (@alvarofilho no GitHub),
 			# me apresentou esse algoritmo que ele escreveu
 			# originalmente na linguagem R para resolver uma
@@ -144,10 +146,11 @@ function evaluate {
 					# só recebe um parâmetro de entrada.
 					integer n=$(eval_per_identifier \
 						$(eval_per_token "$function_node" 'parameters[0].text'))
-					m1=$(( ((1 + sqrt(5)) / 2) ** n ))
-					m2=$(( (1 - ((1 + sqrt(5)) / 2)) ** n ))
-					r=$(printf '%s' $(( (m1 - m2) / sqrt(5) )))
-					unset m1 m2 n
+					float φ=$(( (1 + sqrt(5)) / 2 )) 
+					m1=$(( (φ) ** n ))
+					m2=$(( (1 - (φ)) ** n ))
+					r=$(printf '%s' $(( floor((m1 - m2) / sqrt(5)) )))
+					unset φ m1 m2 n
 					export r
 				}; fib
 			fi ;;
