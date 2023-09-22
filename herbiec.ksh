@@ -97,7 +97,6 @@ function evaluate {
 	            	esac
 	
 			unset a b ;;
-	
 		"Bool") integer r=0 
 			value="$(eval_per_token $node value)"
 			( $value ) && r=1 ;;
