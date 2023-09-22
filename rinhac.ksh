@@ -57,7 +57,9 @@ function interpreter {
 
 	json2compound "$ast"
 
-	evaluate ast.expression
+	r=$(evaluate ast.expression)
+
+	printf '%s\n' "$r"
 }
 
 
@@ -72,8 +74,12 @@ function evaluate {
 	# parâmetro de função posteriormente.
 	case "$kind" in
 	        "Binary")
+			# Inicializar r como 0, que é tanto nulo no sentido
+			# decimal mesmo quanto falso no sentido de binário.
+			r=0
 			a=$(evaluate "$node.lhs")
 			b=$(evaluate "$node.rhs")
+	
 			case "$(eval_per_token $node op)" in
 				"Mul") r=$(( a * b )) ;;
 				"Div") r=$(( a / b )) ;;
@@ -89,8 +95,12 @@ function evaluate {
 				"And") r=$(( a && b )) ;;
 				"Or") r=$(( a || b )) ;;
 	            	esac
+	
 			unset a b ;;
-		"Bool") printlog ERRORF "$kind not implemented yet, soon I will get it done." ;;
+	
+		"Bool") integer r=0 
+			value="$(eval_per_token $node value)"
+			( $value ) && r=1 ;;
 		"Call") # Para quem estamos ligando?
 		       	identifier=$(eval_per_token $node callee.text)
 			function_node=${records[$identifier]}
@@ -147,8 +157,8 @@ function evaluate {
 					integer n=$(eval_per_identifier \
 						$(eval_per_token "$function_node" 'parameters[0].text'))
 					float φ=$(( (1 + sqrt(5)) / 2 )) 
-					m1=$(( (φ) ** n ))
-					m2=$(( (1 - (φ)) ** n ))
+					m1=$(( φ ** n ))
+					m2=$(( (1 - φ) ** n ))
 					r=$(printf '%s' $(( floor((m1 - m2) / sqrt(5)) )))
 					unset φ m1 m2 n
 					export r
@@ -200,7 +210,7 @@ function evaluate {
 	# Como em shell a saída de uma função normalmente é
 	# imprimindo algo na tela, iremos retornar r
 	# imprimindo-o. 
-	printf '%s\n' "$r"
+	printf '%s' "$r"
 	
 	unset node kind r
 	return 0
