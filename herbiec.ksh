@@ -158,8 +158,13 @@ function evaluate {
 					float phi=$(( (1 + sqrt(5)) / 2 )) 
 					m1=$(( phi ** n ))
 					m2=$(( (1 - phi) ** n ))
-					r=$(printf '%s' $(( floor((m1 - m2) / sqrt(5)) )))
-					unset phi m1 m2 n
+					# Criando um passo extra para retornar o
+					# valor pois queremos que a execução do
+					# cálculo apareça durante o processo de
+					# depuração do programa.
+					r1=$(( (m1 - m2) / sqrt(5) ))
+					r=$(printf '%s' $(( floor(r1) )))
+					unset phi m1 m2 r1 n 
 					export r
 				}; fib
 			fi ;;
