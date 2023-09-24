@@ -155,11 +155,11 @@ function evaluate {
 					# só recebe um parâmetro de entrada.
 					integer n=$(eval_per_identifier \
 						$(eval_per_token "$function_node" 'parameters[0].text'))
-					float φ=$(( (1 + sqrt(5)) / 2 )) 
-					m1=$(( φ ** n ))
-					m2=$(( (1 - φ) ** n ))
+					float phi=$(( (1 + sqrt(5)) / 2 )) 
+					m1=$(( phi ** n ))
+					m2=$(( (1 - phi) ** n ))
 					r=$(printf '%s' $(( floor((m1 - m2) / sqrt(5)) )))
-					unset φ m1 m2 n
+					unset phi m1 m2 n
 					export r
 				}; fib
 			fi ;;
