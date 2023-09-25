@@ -22,10 +22,24 @@ função](https://github.com/takusuman/herbiec/blob/master/herbiec.ksh#L223-L256
 algo que é pouco usado na linguagem mesmo estando ali desde a criação do padrão.
 Creio que servirá bem para questão de aprendizado.
 
+### Por que "herbiec"?
+
+Como de costume, normalmente coloco nomes de locais ou referências culturais nos
+programas que crio, normal entre todo programador, engenheiro, cientista
+artista ou alquimista.  
+"Herbie" em si vem de dois lugares: "Herbie, The Love Bug" (vulgo "Se meu Fusca
+falasse"), aquela série de filmes da Disney que creio todos já terem pelo menos
+ouvido falar, e do músico instrumentista Herbie Mann, que gravou o álbum
+"Memphis Underground" em 1969, ao qual eu estava ouvindo no momento em que testei
+o programa pela primeira vez e obtive êxito --- mais especificamente, estava
+ouvindo a [faixa 3](https://youtu.be/1hRi_H9KDUc?si=N2gRJUvop6AbJcAv) dele --- e
+que é um dos meus álbuns de crossover jazz favoritos.
+
+
 ## Bugs descobertos
 
 Graças à minha brilhante ideia de fazer um interpretador em Korn Shell 93 ---
-mesmo que a linguagem tenha se mostraddo mais-do-que capaz de fazer ---, acabei
+mesmo que a linguagem tenha se mostrado mais-do-que capaz de fazer ---, acabei
 por descobrir alguns bugs no processo, tanto na hora de programar quanto na hora
 de testar.
 
