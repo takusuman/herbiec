@@ -11,15 +11,15 @@
 
 O herbiec é um interpretador do tipo *tree-walking* feito especificamente para a
 [Rinha de Compiladores](https://github.com/aripiprazole/rinha-de-compiler/)
-desse ano, organizada pela Sofia Rodrigues e pela Gabrielle Guimarães.  
+desse ano, organizada pela Sofia Rodrigues e Gabrielle Guimarães.  
 Por mais que o programa (ou script, chame-o como preferir) não tenha muito
 propósito fora do desafio enquanto interpretador, alguns usos de funções da
-linguagem aqui se mostraram interessantes para se replicar posteriormente como,
+linguagem aqui se mostraram interessantes para replicar posteriormente como,
 por exemplo, uma função para
 [conversão de JSON para uma estrutura de variável composta](https://github.com/takusuman/herbiec/blob/master/herbiec.ksh#L284)
 e métodos para poder receber [elementos de variáveis compostas como entrada de
 função](https://github.com/takusuman/herbiec/blob/master/herbiec.ksh#L223-L256),
-algo que é pouco usado na linguagem mesmo estando ali desde a criação do padrão.
+algo que é pouco explorado na linguagem mesmo estando ali desde a criação do padrão.   
 Creio que servirá bem para questão de aprendizado.
 
 ### Por que "herbiec"?
