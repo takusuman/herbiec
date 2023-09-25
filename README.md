@@ -25,8 +25,8 @@ Creio que servirá bem para questão de aprendizado.
 ### Por que "herbiec"?
 
 Como de costume, normalmente coloco nomes de locais ou referências culturais nos
-programas que crio, normal entre todo programador, engenheiro, cientista
-artista ou alquimista.  
+programas que crio, normal entre todo programador, engenheiro, cientista, artista
+ou alquimista.  
 "Herbie" em si vem de dois lugares: "Herbie, The Love Bug" (vulgo "Se meu Fusca
 falasse"), aquela série de filmes da Disney que creio todos já terem pelo menos
 ouvido falar, e do músico instrumentista Herbie Mann, que gravou o álbum
