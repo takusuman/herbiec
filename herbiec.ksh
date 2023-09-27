@@ -89,8 +89,20 @@ function evaluate {
 				"Mul") ((r= a * b )) ;;
 				"Div") ((r= a / b )) ;;
 				"Rem") ((r= a % b )) ;;
-				"Add") if [[ $(eval_per_token a kind) == "Str" \
-					|| $(eval_per_token b kind) == "Str" ]]; then
+					# Essa comparação funciona juntando os
+					# tipos (kind) de cada token em uma
+					# string só, e então busca, usando o
+					# RegEx embutido do KornShell 93, pelo
+					# "Str". Se tiver ali, significa que um
+					# dos tokens é uma string, o que
+					# significa que nossa soma é uma
+					# contatenação de strings e não uma soma
+					# de inteiros/vírgulas flutuantes.
+					# Essa comparação não é mais rápida que
+					# a outra, mas se mostra mais elegante.
+				"Add") if [[ \
+					"$(eval_per_token a kind)$(eval_per_token b kind)" \
+						=~ (Str) ]]; then
 						# Me enganem que eu gosto,
 						# testes com "@!fibbo::" e
 						# caracteres do tipo.
@@ -113,7 +125,7 @@ function evaluate {
 		"Bool") integer r=0 
 			value="$(eval_per_token $node value)"
 			( $value ) && r=1
-			unset value;;
+			unset value ;;
 		"Call") # Para quem estamos ligando?
 		       	identifier=$(eval_per_token $node callee.text)
 			function_node=${records[$identifier]}
@@ -169,6 +181,7 @@ function evaluate {
 					# só recebe um parâmetro de entrada.
 					integer n=$(eval_per_identifier \
 						$(eval_per_token "$function_node" 'parameters[0].text'))
+					float phi m1 m2
 					((phi= (1 + sqrt(5)) / 2 )) 
 					((m1= phi ** n ))
 					((m2= (1 - phi) ** n ))
