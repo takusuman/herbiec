@@ -1,0 +1,117 @@
+{
+  "name": "ch.rinha",
+  "expression": {
+    "kind": "Print",
+    "value": {
+      "kind": "Call",
+      "callee": {
+        "kind": "Call",
+        "callee": {
+          "kind": "Function",
+          "parameters": [
+            {
+              "text": "a",
+              "location": {
+                "start": 10,
+                "end": 11,
+                "filename": "ch.rinha"
+              }
+            }
+          ],
+          "value": {
+            "kind": "Function",
+            "parameters": [
+              {
+                "text": "b",
+                "location": {
+                  "start": 23,
+                  "end": 24,
+                  "filename": "ch.rinha"
+                }
+              }
+            ],
+            "value": {
+              "kind": "Binary",
+              "lhs": {
+                "kind": "Var",
+                "text": "a",
+                "location": {
+                  "start": 35,
+                  "end": 36,
+                  "filename": "ch.rinha"
+                }
+              },
+              "op": "Add",
+              "rhs": {
+                "kind": "Var",
+                "text": "b",
+                "location": {
+                  "start": 37,
+                  "end": 38,
+                  "filename": "ch.rinha"
+                }
+              },
+              "location": {
+                "start": 35,
+                "end": 38,
+                "filename": "ch.rinha"
+              }
+            },
+            "location": {
+              "start": 20,
+              "end": 42,
+              "filename": "ch.rinha"
+            }
+          },
+          "location": {
+            "start": 7,
+            "end": 44,
+            "filename": "ch.rinha"
+          }
+        },
+        "arguments": [
+          {
+            "kind": "Int",
+            "value": 1,
+            "location": {
+              "start": 46,
+              "end": 47,
+              "filename": "ch.rinha"
+            }
+          }
+        ],
+        "location": {
+          "start": 6,
+          "end": 48,
+          "filename": "ch.rinha"
+        }
+      },
+      "arguments": [
+        {
+          "kind": "Int",
+          "value": 2,
+          "location": {
+            "start": 49,
+            "end": 50,
+            "filename": "ch.rinha"
+          }
+        }
+      ],
+      "location": {
+        "start": 6,
+        "end": 51,
+        "filename": "ch.rinha"
+      }
+    },
+    "location": {
+      "start": 0,
+      "end": 52,
+      "filename": "ch.rinha"
+    }
+  },
+  "location": {
+    "start": 0,
+    "end": 52,
+    "filename": "ch.rinha"
+  }
+}

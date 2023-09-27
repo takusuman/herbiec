@@ -1,0 +1,59 @@
+{
+  "name": "bool.rinha",
+  "expression": {
+    "kind": "If",
+    "condition": {
+      "kind": "Bool",
+      "value": true,
+      "location": {
+        "start": 3,
+        "end": 7,
+        "filename": "bool.rinha"
+      }
+    },
+    "then": {
+      "kind": "Print",
+      "value": {
+        "kind": "Str",
+        "value": "Lula hid the facts",
+        "location": {
+          "start": 17,
+          "end": 37,
+          "filename": "bool.rinha"
+        }
+      },
+      "location": {
+        "start": 11,
+        "end": 38,
+        "filename": "bool.rinha"
+      }
+    },
+    "otherwise": {
+      "kind": "Print",
+      "value": {
+        "kind": "Str",
+        "value": "Eat ze bugszen",
+        "location": {
+          "start": 55,
+          "end": 71,
+          "filename": "bool.rinha"
+        }
+      },
+      "location": {
+        "start": 49,
+        "end": 72,
+        "filename": "bool.rinha"
+      }
+    },
+    "location": {
+      "start": 0,
+      "end": 74,
+      "filename": "bool.rinha"
+    }
+  },
+  "location": {
+    "start": 0,
+    "end": 74,
+    "filename": "bool.rinha"
+  }
+}

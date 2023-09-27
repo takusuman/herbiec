@@ -1,0 +1,292 @@
+{
+  "name": "test.rinha",
+  "expression": {
+    "kind": "Let",
+    "name": {
+      "text": "_",
+      "location": {
+        "start": 4,
+        "end": 5,
+        "filename": "test.rinha"
+      }
+    },
+    "value": {
+      "kind": "Print",
+      "value": {
+        "kind": "Str",
+        "value": "@!compile::",
+        "location": {
+          "start": 14,
+          "end": 27,
+          "filename": "test.rinha"
+        }
+      },
+      "location": {
+        "start": 8,
+        "end": 28,
+        "filename": "test.rinha"
+      }
+    },
+    "next": {
+      "kind": "Let",
+      "name": {
+        "text": "fibbo",
+        "location": {
+          "start": 35,
+          "end": 40,
+          "filename": "test.rinha"
+        }
+      },
+      "value": {
+        "kind": "Function",
+        "parameters": [
+          {
+            "text": "n",
+            "location": {
+              "start": 47,
+              "end": 48,
+              "filename": "test.rinha"
+            }
+          }
+        ],
+        "value": {
+          "kind": "If",
+          "condition": {
+            "kind": "Binary",
+            "lhs": {
+              "kind": "Var",
+              "text": "n",
+              "location": {
+                "start": 61,
+                "end": 62,
+                "filename": "test.rinha"
+              }
+            },
+            "op": "Lt",
+            "rhs": {
+              "kind": "Int",
+              "value": 2,
+              "location": {
+                "start": 65,
+                "end": 66,
+                "filename": "test.rinha"
+              }
+            },
+            "location": {
+              "start": 61,
+              "end": 66,
+              "filename": "test.rinha"
+            }
+          },
+          "then": {
+            "kind": "Var",
+            "text": "n",
+            "location": {
+              "start": 74,
+              "end": 75,
+              "filename": "test.rinha"
+            }
+          },
+          "otherwise": {
+            "kind": "Binary",
+            "lhs": {
+              "kind": "Call",
+              "callee": {
+                "kind": "Var",
+                "text": "fibbo",
+                "location": {
+                  "start": 91,
+                  "end": 96,
+                  "filename": "test.rinha"
+                }
+              },
+              "arguments": [
+                {
+                  "kind": "Binary",
+                  "lhs": {
+                    "kind": "Var",
+                    "text": "n",
+                    "location": {
+                      "start": 97,
+                      "end": 98,
+                      "filename": "test.rinha"
+                    }
+                  },
+                  "op": "Sub",
+                  "rhs": {
+                    "kind": "Int",
+                    "value": 1,
+                    "location": {
+                      "start": 101,
+                      "end": 102,
+                      "filename": "test.rinha"
+                    }
+                  },
+                  "location": {
+                    "start": 97,
+                    "end": 102,
+                    "filename": "test.rinha"
+                  }
+                }
+              ],
+              "location": {
+                "start": 91,
+                "end": 103,
+                "filename": "test.rinha"
+              }
+            },
+            "op": "Add",
+            "rhs": {
+              "kind": "Call",
+              "callee": {
+                "kind": "Var",
+                "text": "fibbo",
+                "location": {
+                  "start": 106,
+                  "end": 111,
+                  "filename": "test.rinha"
+                }
+              },
+              "arguments": [
+                {
+                  "kind": "Binary",
+                  "lhs": {
+                    "kind": "Var",
+                    "text": "n",
+                    "location": {
+                      "start": 112,
+                      "end": 113,
+                      "filename": "test.rinha"
+                    }
+                  },
+                  "op": "Sub",
+                  "rhs": {
+                    "kind": "Int",
+                    "value": 2,
+                    "location": {
+                      "start": 116,
+                      "end": 117,
+                      "filename": "test.rinha"
+                    }
+                  },
+                  "location": {
+                    "start": 112,
+                    "end": 117,
+                    "filename": "test.rinha"
+                  }
+                }
+              ],
+              "location": {
+                "start": 106,
+                "end": 118,
+                "filename": "test.rinha"
+              }
+            },
+            "location": {
+              "start": 91,
+              "end": 118,
+              "filename": "test.rinha"
+            }
+          },
+          "location": {
+            "start": 57,
+            "end": 122,
+            "filename": "test.rinha"
+          }
+        },
+        "location": {
+          "start": 43,
+          "end": 124,
+          "filename": "test.rinha"
+        }
+      },
+      "next": {
+        "kind": "Print",
+        "value": {
+          "kind": "Binary",
+          "lhs": {
+            "kind": "Str",
+            "value": "@!fibbo::",
+            "location": {
+              "start": 133,
+              "end": 144,
+              "filename": "test.rinha"
+            }
+          },
+          "op": "Add",
+          "rhs": {
+            "kind": "Binary",
+            "lhs": {
+              "kind": "Call",
+              "callee": {
+                "kind": "Var",
+                "text": "fibbo",
+                "location": {
+                  "start": 147,
+                  "end": 152,
+                  "filename": "test.rinha"
+                }
+              },
+              "arguments": [
+                {
+                  "kind": "Int",
+                  "value": 35,
+                  "location": {
+                    "start": 153,
+                    "end": 155,
+                    "filename": "test.rinha"
+                  }
+                }
+              ],
+              "location": {
+                "start": 147,
+                "end": 156,
+                "filename": "test.rinha"
+              }
+            },
+            "op": "Add",
+            "rhs": {
+              "kind": "Str",
+              "value": "",
+              "location": {
+                "start": 159,
+                "end": 161,
+                "filename": "test.rinha"
+              }
+            },
+            "location": {
+              "start": 147,
+              "end": 161,
+              "filename": "test.rinha"
+            }
+          },
+          "location": {
+            "start": 133,
+            "end": 161,
+            "filename": "test.rinha"
+          }
+        },
+        "location": {
+          "start": 127,
+          "end": 162,
+          "filename": "test.rinha"
+        }
+      },
+      "location": {
+        "start": 31,
+        "end": 162,
+        "filename": "test.rinha"
+      }
+    },
+    "location": {
+      "start": 0,
+      "end": 162,
+      "filename": "test.rinha"
+    }
+  },
+  "location": {
+    "start": 0,
+    "end": 162,
+    "filename": "test.rinha"
+  }
+}
