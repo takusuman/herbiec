@@ -78,14 +78,28 @@ function evaluate {
 			# decimal mesmo quanto falso no sentido de binário.
 			r=0
 			a=$(evaluate "$node.lhs")
-			b=$(evaluate "$node.rhs")
-	
+			b=$(evaluate "$node.rhs") 
+
+			# "Guardando" o tipo dos operadores para caso a operação
+			# seja "Add", pois precisaremos discerinir o tipo String
+			# de qualquer outro.
+			a.kind=$(eval_per_token "$node.lhs" "kind")
+			b.kind=$(eval_per_token "$node.rhs" "kind")
+
 			case "$(eval_per_token $node op)" in
 				"Mul") r=$(( a * b )) ;;
 				"Div") r=$(( a / b )) ;;
 				"Rem") r=$(( a % b )) ;;
-        	        	"Add") r=$(( a + b )) ;;
-                	       	"Sub") r=$(( a - b )) ;;
+				"Add") if [[ $(eval_per_token a kind) == "Str" \
+					|| $(eval_per_token b kind) == "Str" ]]; then
+						# Me enganem que eu gosto,
+						# testes com "@!fibbo::" e
+						# caracteres do tipo.
+						r="$(echo "$a $b")"
+					else
+						r=$(( a + b ))
+					fi ;;
+				"Sub") r=$(( a - b )) ;;
 				"Eq") r=$(( a == b )) ;;
 				"Neq") r=$(( a != b )) ;;
 				"Lt") r=$(( a < b )) ;;  
