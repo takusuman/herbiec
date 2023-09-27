@@ -86,9 +86,9 @@ function evaluate {
 			b.kind=$(eval_per_token "$node.rhs" "kind")
 
 			case "$(eval_per_token $node op)" in
-				"Mul") r=$(( a * b )) ;;
-				"Div") r=$(( a / b )) ;;
-				"Rem") r=$(( a % b )) ;;
+				"Mul") ((r= a * b )) ;;
+				"Div") ((r= a / b )) ;;
+				"Rem") ((r= a % b )) ;;
 				"Add") if [[ $(eval_per_token a kind) == "Str" \
 					|| $(eval_per_token b kind) == "Str" ]]; then
 						# Me enganem que eu gosto,
@@ -96,23 +96,24 @@ function evaluate {
 						# caracteres do tipo.
 						r="$a$b"
 					else
-						r=$(( a + b ))
+						((r= a + b ))
 					fi ;;
-				"Sub") r=$(( a - b )) ;;
-				"Eq") r=$(( a == b )) ;;
-				"Neq") r=$(( a != b )) ;;
-				"Lt") r=$(( a < b )) ;;  
-				"Gt") r=$(( a > b )) ;; 
-				"Lte") r=$(( a <= b )) ;;  
-				"Gte") r=$(( a >= b )) ;; 
-				"And") r=$(( a && b )) ;;
-				"Or") r=$(( a || b )) ;;
+				"Sub") ((r= a - b )) ;;
+				"Eq") ((r= a == b )) ;;
+				"Neq") ((r= a != b )) ;;
+				"Lt") ((r= a < b )) ;;  
+				"Gt") ((r= a > b )) ;; 
+				"Lte") ((r= a <= b )) ;;  
+				"Gte") ((r= a >= b )) ;; 
+				"And") ((r= a && b )) ;;
+				"Or") ((r= a || b )) ;;
 	            	esac
 	
 			unset a b ;;
 		"Bool") integer r=0 
 			value="$(eval_per_token $node value)"
-			( $value ) && r=1 ;;
+			( $value ) && r=1
+			unset value;;
 		"Call") # Para quem estamos ligando?
 		       	identifier=$(eval_per_token $node callee.text)
 			function_node=${records[$identifier]}
@@ -127,7 +128,7 @@ function evaluate {
 			# desafio já faça isso, nós talvez precisemos verificar
 			# se a quantidade de argumentos passados para a função é
 			# o mesmo de parâmetros aceitos por ela.
-			args_param_difference=$((argsn - parametersn))
+			((args_param_difference= argsn - parametersn))
 
 			if (( args_param_difference != 0 )); then
 				if (( args_param_difference > 0 )); then
@@ -168,14 +169,14 @@ function evaluate {
 					# só recebe um parâmetro de entrada.
 					integer n=$(eval_per_identifier \
 						$(eval_per_token "$function_node" 'parameters[0].text'))
-					float phi=$(( (1 + sqrt(5)) / 2 )) 
-					m1=$(( phi ** n ))
-					m2=$(( (1 - phi) ** n ))
+					((phi= (1 + sqrt(5)) / 2 )) 
+					((m1= phi ** n ))
+					((m2= (1 - phi) ** n ))
 					# Criando um passo extra para retornar o
 					# valor pois queremos que a execução do
 					# cálculo apareça durante o processo de
 					# depuração do programa.
-					r1=$(( (m1 - m2) / sqrt(5) ))
+					((r1= (m1 - m2) / sqrt(5) ))
 					r=$(printf '%s' $(( floor(r1) )))
 					unset phi m1 m2 r1 n 
 					export r
