@@ -340,8 +340,17 @@ function json2compound {
 	# padrão '"abcde": abcde'  por 'abcde=abcde'. o '"\([^"]*\)"' "pega" tudo
 	# que estiver entre " e " e "guarda" em "\1" para podermos usar depois
 	# na hora de escrever por qual padrão queremos substituir.
+
+#	eval ast=$(echo "$ast_json" | tr -d $'\r' | \
+#		sed 's/\{/\(/g; s/\}/\)/g; s/\[/\(/g; s/\]/\)/g; s/"\([^"]*\)":[^ ]*./\1=/g; s/,//g')
+	
+	# Comando novo, só pelos testes.
+	# Dessa vez, removemos o espaço depois de ":", pois pode nos causar
+	# problemas para converter em variável composta. Eu não sei uma forma
+	# melhor de resolver isso agora e faltam menos de 24h para os testes
+	# definitivos. Tenha isso como exemplo e não como matriz de cópia.
 	eval ast=$(echo "$ast_json" | tr -d $'\r' | \
-		sed 's/\{/\(/g; s/\}/\)/g; s/\[/\(/g; s/\]/\)/g; s/"\([^"]*\)":[^ ]*./\1=/g; s/,//g')
+		sed 's/: /:/g; s/"\([^"]*\)":/\1=/g; s/\{/\(/g; s/\}/\)/g; s/\[/\(/g; s/\]/\)/g; s/,/ /g')
 
 	# Agora, que limpemos a memória removendo o JSON que acabamos de
 	# processar.
