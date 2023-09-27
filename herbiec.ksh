@@ -95,7 +95,7 @@ function evaluate {
 						# Me enganem que eu gosto,
 						# testes com "@!fibbo::" e
 						# caracteres do tipo.
-						r="$(echo "$a$b")"
+						r="$a$b"
 					else
 						r=$(( a + b ))
 					fi ;;
