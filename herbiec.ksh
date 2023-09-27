@@ -202,13 +202,19 @@ function evaluate {
 				printlog INFOF "Dealing with $content, recording it in case of a call."
 				record_function "$identifier" "$node.value"
 				printlog INFOF "records: ${records[@]}" 
+			elif [[ $content == "Print" ]]; then
+				# Hack "quick-n-dirty", mas a princípio vai
+				# funcionar bem pra esse caso para simplesmente
+				# imprimir na tela sem ter que quebrar o "laço
+				# case" --- é isso mesmo, produção? É, shell tem
+				# dessas.
+				echo $(evaluate "$node.value") 
 			else
 				r=$(evaluate "$node.value")
 				eval $(printf '%s=%s' "$identifier" "$r")
 				printlog INFOF "Let $identifier=$r" 
-				unset r
 			fi
-			unset content identifier
+			unset content identifier r
 
 			[[ -n $next ]] \
 				&& unset next \
