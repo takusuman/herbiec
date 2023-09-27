@@ -62,7 +62,6 @@ function interpreter {
 	printf '%s\n' "$r"
 }
 
-
 # Referências: https://github.com/aripiprazole/rinha-de-compiler/blob/main/SPECS.md 
 function evaluate {
 	[[ $verbose ]] && set -x
@@ -311,16 +310,24 @@ function json2compound {
 	# FIXME: Esse comando do sed está horrível, mas funciona por ora.
 	# Acho que dá pra cortar bastante coisa nisso.
 	#
-	# Resumindo os comandos no sed:
+	# Resumindo os comandos no sed, dividindo a primeira e a segunda parte:
+	# Primeira parte, "mini-dos/mac2unix", mas com o tr:
+	# * "-d $'\r'": Remove o caractere de escape '\r', que é inserido pelo
+	# MacOSX em arquivos de texto no lugar do '\n', que é a quebra de linha
+	# padrão em UNIX-compatível --- e também do ANSI, se não me engano. Esse
+	# comando acaba sendo um "curinga" pro DOS/Windows 9x/NT também, que usa
+	# '\r\n' como quebra de linha.
+	#
+	# Segunda parte, conversão do JSON em si:
 	# * 's/\{/\(/g' e 's/\}/\)/g': Substituem ('s') globalmente ('g')
 	# '{' e '}' por '(' e ')', respectivamente;
 	# * 's/\[/\(/g' e 's/\]/\)/g': Faz o mesmo, só que com '[' e ']';
 	# * 's/"\([^"]*\)":[^ ]*./\1=/g': Substitui tudo que estiver dentro do
 	# padrão '"abcde": abcde'  por 'abcde=abcde'. o '"\([^"]*\)"' "pega" tudo
 	# que estiver entre " e " e "guarda" em "\1" para podermos usar depois
-	# na hora de escrever por qual padrão queremos substituir;
-	eval ast=$(echo "$ast_json" | \
-		sed -e 's/\{/\(/g; s/\}/\)/g; s/\[/\(/g; s/\]/\)/g; s/"\([^"]*\)":[^ ]*./\1=/g; s/,//g')
+	# na hora de escrever por qual padrão queremos substituir.
+	eval ast=$(echo "$ast_json" | tr -d $'\r' | \
+		sed 's/\{/\(/g; s/\}/\)/g; s/\[/\(/g; s/\]/\)/g; s/"\([^"]*\)":[^ ]*./\1=/g; s/,//g')
 
 	# Agora, que limpemos a memória removendo o JSON que acabamos de
 	# processar.
