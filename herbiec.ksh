@@ -239,8 +239,48 @@ function evaluate {
 			       && unset value ;;
 	        "Str") r="$(eval_per_token $node value)";;
 		"Var") r="$(eval_per_identifier $(eval_per_token $node text))" ;;
-		"Tuple"| "First" | "Second") printlog ERRORF \
-			"$progname: Tuples and functions related are not implemented for now." ;;
+		"Tuple") 
+			# Usaremos a localização da declaração das tuplas no
+			# arquivo como um distintivo entre a chamada aqui e
+			# outras que possam ter sido declaradas também.
+			# O Senhor age de formas misteriosas.
+			First_location=$(eval_per_token "$node" first.location.start)
+			Second_location=$(eval_per_token "$node" second.location.start)
+			
+			# Parece gambiarra? Confia que dá certo.
+			# Deus no comando e nós no teclado.	
+			r="$(printf 'tuple[%d][0]="%s" tuple[%d][1]="%s"' \
+				$First_location "$(evaluate "$node.first")" \
+				$Second_location "$(evaluate "$node.second")" )"
+
+			unset First_location Second_location ;;
+		"First" | "Second") 
+			# Estamos lidando, de fato, com uma tupla? Senão,
+			# devemos devolver um erro.
+			expr_kind="$(eval_per_token $node value.kind)"
+			if [[ "$expr_kind" != "Tuple" ]]; then
+				printlog ERRORF "$0: $kind: Expected \"Tuple\", got $expr_kind."
+				exit 1
+			fi
+		
+			# Agora sim nós iremos ter a tupla e seus valores de fato.
+			# Novamente, também pegaremos a localização da dita na
+			# A.S.T., pois será o identificador (teoricamente) único
+			# que usaremos para encontrar seu valor.
+			First_location=$(eval_per_token "$node.value" first.location.start)
+			Second_location=$(eval_per_token "$node.value" second.location.start)
+			eval $(evaluate "$node.value")
+
+			if [[ $kind == "First" ]]; then
+			       	r=$(eval_per_identifier "tuple[$First_location][0]")
+			elif [[ $kind == "Second" ]]; then
+				r=$(eval_per_identifier "tuple[$Second_location][1]")
+			else
+				printlog ERRORF "$0: $kind: You were not supposed to be here."
+				exit 1
+			fi
+			
+			unset expr_kind r_tuple First_location Second_location;;
 		"Print") r="$(evaluate "$node.value")" ;;
 	esac
 
