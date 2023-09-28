@@ -240,17 +240,17 @@ function evaluate {
 	        "Str") r="$(eval_per_token $node value)";;
 		"Var") r="$(eval_per_identifier $(eval_per_token $node text))" ;;
 		"Tuple") 
-			# Usaremos a localização da declaração das tuplas no
+			# Usaremos a localização da declaração da tupla no
 			# arquivo como um distintivo entre a chamada aqui e
-			# outras que possam ter sido declaradas também.
+			# outras que possam vir a ser declaradas também.
 			# O Senhor age de formas misteriosas.
 			tuple_location=$(eval_per_token "$node" location.start)
 			
 			# Parece gambiarra? Confia que dá certo.
-			# Deus no comando e nós no teclado.	
+			# Deus no comando e nós no teclado.
 			r="$(printf 'tuple[%d][0]="%s" tuple[%d][1]="%s"' \
 				$tuple_location "$(evaluate "$node.first")" \
-				$tuple_location "$(evaluate "$node.second")" )"
+				$tuple_location "$(evaluate "$node.second")")"
 
 			unset tuple_location ;;
 		"First" | "Second") 
@@ -262,7 +262,11 @@ function evaluate {
 				exit 1
 			fi
 		
-			# Agora sim nós iremos ter a tupla e seus valores de fato.
+			# Agora sim nós iremos ter a tupla e seus valores de fato utilizando
+			# o eval, velho conhecido nosso e que basicamente vai
+			# fazer o shell interpretar aquela string com a
+			# declaração da tupla como uma declaração formal do que
+			# executar --- eu deveria ter dado essa explicação antes.
 			# Novamente, também pegaremos a localização da dita na
 			# A.S.T., pois será o identificador (teoricamente) único
 			# que usaremos para encontrar seu valor.
@@ -270,9 +274,9 @@ function evaluate {
 			eval $(evaluate "$node.value")
 
 			if [[ $kind == "First" ]]; then
-			       	r=$(eval_per_identifier "tuple[$tuple_location][0]")
+			       	r="$(eval_per_identifier "tuple[$tuple_location][0]")"
 			elif [[ $kind == "Second" ]]; then
-				r=$(eval_per_identifier "tuple[$tuple_location][1]")
+				r="$(eval_per_identifier "tuple[$tuple_location][1]")"
 			else
 				printlog ERRORF "$0: $kind: You were not supposed to be here."
 				exit 1
@@ -287,7 +291,7 @@ function evaluate {
 	# imprimindo-o. 
 	printf '%s' "$r"
 	
-	unset node kind r
+	unset node kind r tuple
 	return 0
 }
 
