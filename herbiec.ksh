@@ -244,16 +244,15 @@ function evaluate {
 			# arquivo como um distintivo entre a chamada aqui e
 			# outras que possam ter sido declaradas também.
 			# O Senhor age de formas misteriosas.
-			First_location=$(eval_per_token "$node" first.location.start)
-			Second_location=$(eval_per_token "$node" second.location.start)
+			tuple_location=$(eval_per_token "$node" location.start)
 			
 			# Parece gambiarra? Confia que dá certo.
 			# Deus no comando e nós no teclado.	
 			r="$(printf 'tuple[%d][0]="%s" tuple[%d][1]="%s"' \
-				$First_location "$(evaluate "$node.first")" \
-				$Second_location "$(evaluate "$node.second")" )"
+				$tuple_location "$(evaluate "$node.first")" \
+				$tuple_location "$(evaluate "$node.second")" )"
 
-			unset First_location Second_location ;;
+			unset tuple_location ;;
 		"First" | "Second") 
 			# Estamos lidando, de fato, com uma tupla? Senão,
 			# devemos devolver um erro.
@@ -267,20 +266,19 @@ function evaluate {
 			# Novamente, também pegaremos a localização da dita na
 			# A.S.T., pois será o identificador (teoricamente) único
 			# que usaremos para encontrar seu valor.
-			First_location=$(eval_per_token "$node.value" first.location.start)
-			Second_location=$(eval_per_token "$node.value" second.location.start)
+			tuple_location=$(eval_per_token "$node.value" location.start)
 			eval $(evaluate "$node.value")
 
 			if [[ $kind == "First" ]]; then
-			       	r=$(eval_per_identifier "tuple[$First_location][0]")
+			       	r=$(eval_per_identifier "tuple[$tuple_location][0]")
 			elif [[ $kind == "Second" ]]; then
-				r=$(eval_per_identifier "tuple[$Second_location][1]")
+				r=$(eval_per_identifier "tuple[$tuple_location][1]")
 			else
 				printlog ERRORF "$0: $kind: You were not supposed to be here."
 				exit 1
 			fi
 			
-			unset expr_kind r_tuple First_location Second_location;;
+			unset expr_kind r_tuple tuple_location ;;
 		"Print") r="$(evaluate "$node.value")" ;;
 	esac
 
