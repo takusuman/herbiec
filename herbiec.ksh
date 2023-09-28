@@ -215,7 +215,7 @@ function evaluate {
 				printlog INFOF "Dealing with $content, recording it in case of a call."
 				record_function "$identifier" "$node.value"
 				printlog INFOF "records: $(print -C records)" 
-			elif [[ $content == "Print" ]]; then
+			elif [[ $content == 'Print' ]]; then
 				# Hack "quick-n-dirty", mas a princípio vai
 				# funcionar bem pra esse caso para simplesmente
 				# imprimir na tela sem ter que quebrar o "laço
@@ -261,21 +261,17 @@ function evaluate {
 			# identificador, ou seja, uma variável do tipo tupla,
 			# nós iremos buscar por ela nos "records" e, se estiver,
 			# iremos redeclarar "expr_kind" com o tipo dessa
-			# variável, que será, de fato, verificada posteriormente
-			# antes de processar a tupla.
-			if [[ "$expr_kind" == "Var" ]]; then
+			# variável. Se não tiver um identificador e for
+			# simplesmente o parâmetro, continuamos.
+			if [[ "$expr_kind" == 'Var' ]]; then
 		       		identifier=$(eval_per_token "$node.value" text)
 				tuple_node=${records[$identifier]}
 				tuple_location=$(eval_per_token "$tuple_node" location.start)
 				unset expr_kind; expr_kind=$(eval_per_token "$tuple_node" kind)
-			else
+			elif [[ "$expr_kind" == 'Tuple' ]]; then
 				tuple_location=$(eval_per_token "$node.value" location.start)
 				tuple_node="$node.value"
-			fi
-
-			# Estamos lidando, de fato, com uma tupla? Senão,
-			# devemos devolver um erro.
-			if [[ ! "$expr_kind" =~ (Tuple|Var) ]]; then
+			else
 				printlog ERRORF "$0: $kind: Expected \"Tuple\", got $expr_kind."
 				exit 1
 			fi
@@ -293,9 +289,9 @@ function evaluate {
 
 			eval $(evaluate "$tuple_node")
 
-			if [[ $kind == "First" ]]; then
+			if [[ $kind == 'First' ]]; then
 			       	r="$(eval_per_identifier "tuple[$tuple_location][0]")"
-			elif [[ $kind == "Second" ]]; then
+			elif [[ $kind == 'Second' ]]; then
 				r="$(eval_per_identifier "tuple[$tuple_location][1]")"
 			else
 				printlog ERRORF "$0: $kind: You were not supposed to be here."
