@@ -214,7 +214,7 @@ function evaluate {
 			if [[ $content =~ (Function|Tuple) ]]; then
 				printlog INFOF "Dealing with $content, recording it in case of a call."
 				record_function "$identifier" "$node.value"
-				printlog INFOF "records: ${records[@]}" 
+				printlog INFOF "records: $(print -C records)" 
 			elif [[ $content == "Print" ]]; then
 				# Hack "quick-n-dirty", mas a princípio vai
 				# funcionar bem pra esse caso para simplesmente
@@ -254,10 +254,22 @@ function evaluate {
 
 			unset tuple_location ;;
 		"First" | "Second") 
-			# Estamos lidando, de fato, com uma tupla? Senão,
-			# devemos devolver um erro.
+			# Primeiro, devemos pegar o tipo do nó atual.
 			expr_kind="$(eval_per_token $node value.kind)"
 
+			if [[ "$expr_kind" == "Var" ]]; then
+		       		identifier=$(eval_per_token "$node.value" text)
+				tuple_node=${records[$identifier]}
+				tuple_location=$(eval_per_token "$tuple_node" location.start)
+				unset expr_kind; expr_kind=$(eval_per_token "$tuple_node" kind)
+			else
+				tuple_location=$(eval_per_token "$node.value" location.start)
+				tuple_node="$node.value"
+			fi
+
+
+			# Estamos lidando, de fato, com uma tupla? Senão,
+			# devemos devolver um erro.
 			if [[ ! "$expr_kind" =~ (Tuple|Var) ]]; then
 				printlog ERRORF "$0: $kind: Expected \"Tuple\", got $expr_kind."
 				exit 1
@@ -273,14 +285,6 @@ function evaluate {
 			# Novamente, também pegaremos a localização da dita na
 			# A.S.T., pois será o identificador (teoricamente) único
 			# que usaremos para encontrar seu valor.
-			if [[ "$expr_kind" == "Var" ]]; then
-		       		identifier=$(eval_per_token "$node.value" text)
-				tuple_node=${records[$identifier]}
-				tuple_location=$(eval_per_token "$tuple_node" location.start)
-			else
-				tuple_location=$(eval_per_token "$node.value" location.start)
-				tuple_node="$node.value"
-			fi
 
 			eval $(evaluate "$tuple_node")
 
