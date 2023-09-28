@@ -364,19 +364,15 @@ function usage {
 
 # Função de registro, análoga ao pfmt() de C, mas claramente diferente.
 function printlog {
-	if [[ $talk_to_me ]]; then
-		flag="$1"
-		case "$flag" in 
-			INFOF) colour=${colours.green}; severity='INFO' ;;
-			WARNF) colour=${colours.yellow}; severity='WARNING' ;;
-			ERRORF) colour="${colours.red}"; severity='ERROR' ;;
-		esac; shift
+	flag="$1"
+	case "$flag" in 
+		INFOF) colour=${colours.green}; severity='INFO' ;;
+		WARNF) colour=${colours.yellow}; severity='WARNING' ;;
+		ERRORF) colour="${colours.red}"; severity='ERROR' ;;
+	esac; shift
 
-		msg+="$(printf '%b%s%b: ' ${colour} $severity ${colours.close}) $@"
-		echo "$msg" 1>&2
-	else
-		return 0
-	fi
+	msg+="$(printf '%b%s%b: ' ${colour} $severity ${colours.close}) $@"
+	[[ $talk_to_me || "$flag" == "ERRORF" ]] && echo "$msg" 1>&2
 
 	unset msg flag colour severity
 }
