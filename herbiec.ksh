@@ -1,12 +1,12 @@
 #!/usr/bin/env ksh93
 #
-# rinhac.ksh - Interpretador em Korn Shell 93
+# herbiec.ksh - Interpretador em Korn Shell 93
 # 
 # Copyright (c) 2023 Luiz Antônio Rangel
 # 
 # SPDX-Licence-Identifier: ISC 
 #
-# A otimização na função de Fibonacci, como citado nas linhas 125 até 130, foi
+# A otimização na função de Fibonacci, como já citado durante o código, foi
 # praticamente transcrita de um código escrito na linguagem R por Álvaro Filho.
 # Cabeçalho de direitos autorais:
 # Copyright (c) 2019 Álvaro Filho
