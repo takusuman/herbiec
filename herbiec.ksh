@@ -257,6 +257,12 @@ function evaluate {
 			# Primeiro, devemos pegar o tipo do nó atual.
 			expr_kind="$(eval_per_token $node value.kind)"
 
+			# Se estivermos lidando com uma tupla que utiliza um
+			# identificador, ou seja, uma variável do tipo tupla,
+			# nós iremos buscar por ela nos "records" e, se estiver,
+			# iremos redeclarar "expr_kind" com o tipo dessa
+			# variável, que será, de fato, verificada posteriormente
+			# antes de processar a tupla.
 			if [[ "$expr_kind" == "Var" ]]; then
 		       		identifier=$(eval_per_token "$node.value" text)
 				tuple_node=${records[$identifier]}
@@ -266,7 +272,6 @@ function evaluate {
 				tuple_location=$(eval_per_token "$node.value" location.start)
 				tuple_node="$node.value"
 			fi
-
 
 			# Estamos lidando, de fato, com uma tupla? Senão,
 			# devemos devolver um erro.
