@@ -211,7 +211,7 @@ function evaluate {
 
 			printlog INFOF "Let: $identifier with kind $content." 
 	
-			if [[ $content == "Function" ]]; then
+			if [[ $content =~ (Function|Tuple) ]]; then
 				printlog INFOF "Dealing with $content, recording it in case of a call."
 				record_function "$identifier" "$node.value"
 				printlog INFOF "records: ${records[@]}" 
@@ -257,21 +257,32 @@ function evaluate {
 			# Estamos lidando, de fato, com uma tupla? Senão,
 			# devemos devolver um erro.
 			expr_kind="$(eval_per_token $node value.kind)"
-			if [[ "$expr_kind" != "Tuple" ]]; then
+
+			if [[ ! "$expr_kind" =~ (Tuple|Var) ]]; then
 				printlog ERRORF "$0: $kind: Expected \"Tuple\", got $expr_kind."
 				exit 1
 			fi
 		
-			# Agora sim nós iremos ter a tupla e seus valores de fato utilizando
-			# o eval, velho conhecido nosso e que basicamente vai
-			# fazer o shell interpretar aquela string com a
-			# declaração da tupla como uma declaração formal do que
-			# executar --- eu deveria ter dado essa explicação antes.
+			# Agora sim nós iremos ter a tupla e seus valores de fato
+			# utilizando o eval, velho conhecido nosso e que basicamente
+			# vai fazer o shell interpretar aquela string com a declaração da
+			# tupla como uma declaração formal do que executar --- eu deveria
+			# ter dado essa explicação antes. Entretanto, ele só vai
+			# interpretar o elemento desejado da tupla, não ambos,
+			# assim cortaremos tempo e ciclos de processamento.
 			# Novamente, também pegaremos a localização da dita na
 			# A.S.T., pois será o identificador (teoricamente) único
 			# que usaremos para encontrar seu valor.
-			tuple_location=$(eval_per_token "$node.value" location.start)
-			eval $(evaluate "$node.value")
+			if [[ "$expr_kind" == "Var" ]]; then
+		       		identifier=$(eval_per_token "$node.value" text)
+				tuple_node=${records[$identifier]}
+				tuple_location=$(eval_per_token "$tuple_node" location.start)
+			else
+				tuple_location=$(eval_per_token "$node.value" location.start)
+				tuple_node="$node.value"
+			fi
+
+			eval $(evaluate "$tuple_node")
 
 			if [[ $kind == "First" ]]; then
 			       	r="$(eval_per_identifier "tuple[$tuple_location][0]")"
@@ -281,8 +292,8 @@ function evaluate {
 				printlog ERRORF "$0: $kind: You were not supposed to be here."
 				exit 1
 			fi
-			
-			unset expr_kind r_tuple tuple_location ;;
+
+			unset expr_kind tuple r_tuple tuple_location ;;
 		"Print") r="$(evaluate "$node.value")" ;;
 	esac
 
@@ -291,7 +302,7 @@ function evaluate {
 	# imprimindo-o. 
 	printf '%s' "$r"
 	
-	unset node kind r tuple
+	unset node kind r
 	return 0
 }
 
