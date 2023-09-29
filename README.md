@@ -49,7 +49,7 @@ de testar.
 - No dia 22 de Setembro de 2023, enquanto testava o algoritmo da soma de Gauss,
   descobri um bug que causa um "Memory fault" (lit. "Falha de memória") quando
   tenta se somar até 1 milhão, o que foi reportado à equipe de desenvolvimento
-  do KornShell 93 na [*issue* #686](https://github.com/ksh93/ksh/issues/686).
+  do KornShell 93 na [*issue* #686](https://github.com/ksh93/ksh/issues/686).  
   **Atualização**: O @phidebian
   [me respondeu nessa *issue*](https://github.com/ksh93/ksh/issues/686#issuecomment-1738426726)
   mostrando que o erro se dá não pelo tamanho do tipo ``integer`` no KornShell, que
