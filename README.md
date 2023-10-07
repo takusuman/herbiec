@@ -63,3 +63,19 @@ de testar.
   suporta variáveis com identificadores UTF-8, como, por exemplo,
   ``float φ=$(( (1 + sqrt(5)) / 2 ))`` --- entretanto, isso funciona perfeitamente
   nas versões mais recentes, então não reportei.
+
+## Classificação final
+
+Pelo visto, graças a uma limitação do jq que faz com que ele não formate ou nem
+sequer imprima JSONs com "profundidade" --- no caso, elementos dentro de outros
+elementos principais, como uma árvore --- maior do que 1.024, ou seja, [Dona Culpa
+ficou solteira](https://youtu.be/niPvi8kj9L4?si=jiiy5FdRA69gFl1l&t=972), ao menos
+comigo não se casou. 🤣  
+Entretanto, se o JSON for formatado previamente (seja gerando-o com ``rinha -p``
+ou usando outro programa, como o [``jj``](https://github.com/tidwall/jj)(1)), o
+herbiec aparentemente roda os testes tranquilamente sem demais problemas ---
+tirando o fato da implementação de tuplas não estar tão completa e nem
+"intocável", "*bulletproof*", mas aí já é, de fato, um *affair* meu com a Dona Culpa.  
+Rodeios culturais dignos de um ouvinte de noticiário em rádio à parte, valeu muito a
+experiência, mesmo não tendo entrado para o topo da classificação ou nem ao menos
+pontuado, além de ter deixado um bom exemplo do que KornShell/93 realmente é capaz.
