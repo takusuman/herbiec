@@ -57,10 +57,8 @@ function interpreter {
 
 	json2compound "$ast"
 
-	r=$(evaluate ast.expression)
-
-	printf '%s\n' "$r"
-}
+	evaluate ast.expression
+ }
 
 # Referências: https://github.com/aripiprazole/rinha-de-compiler/blob/main/SPECS.md 
 function evaluate {
